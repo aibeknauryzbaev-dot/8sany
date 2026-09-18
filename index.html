@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сегіз санының құпия асханасы</title>
+  <style>
+    :root{--ink:#17324d;--blue:#4e9ed7;--mint:#c9f4e5;--yellow:#ffd66b;--coral:#ff876f;--white:#fffdf8;--shadow:0 18px 45px rgba(25,75,100,.18)}
+    *{box-sizing:border-box} body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#dff8ff,#fff5cf);min-height:100vh}
+    .shell{max-width:1120px;margin:auto;padding:22px}
+    .hero{min-height:330px;border-radius:30px;overflow:hidden;position:relative;background:linear-gradient(90deg,rgba(20,102,148,.86),rgba(20,102,148,.34)),url('assets/asхана-8-фоны.png') center/cover;box-shadow:var(--shadow);display:flex;align-items:center;padding:35px;color:white}
+    .hero:after{content:"8";position:absolute;right:7%;bottom:-40px;font-size:280px;line-height:1;font-weight:900;color:rgba(255,255,255,.2);transform:rotate(-8deg)}
+    .hero-copy{max-width:600px;position:relative;z-index:1}.eyebrow{font-size:15px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff1a6}.hero h1{font-size:clamp(32px,5vw,58px);line-height:1.03;margin:10px 0}.hero p{font-size:19px;margin:0;max-width:520px}
+    .game{margin-top:22px;background:rgba(255,253,248,.88);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.8);border-radius:28px;box-shadow:var(--shadow);padding:24px}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.pill{background:var(--mint);padding:10px 15px;border-radius:999px;font-weight:800}.score{background:#fff1c2}.progress{height:12px;background:#e7eef1;border-radius:99px;overflow:hidden;margin:18px 0 24px}.progress span{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--coral),var(--yellow));border-radius:99px;transition:width .4s ease}
+    .question{max-width:850px;margin:auto;text-align:center}.round{display:inline-flex;align-items:center;justify-content:center;width:68px;height:68px;border-radius:22px;background:var(--yellow);font-size:32px;font-weight:900;box-shadow:0 8px 0 #e5b63d;margin-bottom:14px}.question h2{font-size:clamp(23px,4vw,36px);margin:8px 0 12px}.hint{color:#557184;margin:0 0 20px}
+    .answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin:22px auto;max-width:760px}.answer{border:3px solid #dbe8eb;background:white;color:var(--ink);border-radius:20px;padding:18px 14px;min-height:68px;font-size:24px;font-weight:900;cursor:pointer;transition:.18s;box-shadow:0 6px 0 #dbe8eb}.answer:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 9px 0 #c4dce8}.answer.correct{background:#c9f4e5;border-color:#4eb98f;box-shadow:0 6px 0 #379a76}.answer.wrong{background:#ffe0d8;border-color:#ed806b;box-shadow:0 6px 0 #cf6653}.answer:disabled{cursor:default}
+    .feedback{min-height:32px;font-size:20px;font-weight:800;margin:12px}.feedback.good{color:#16845b}.feedback.bad{color:#bd4c3a}.controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.btn{border:0;border-radius:999px;padding:14px 23px;font-size:17px;font-weight:900;cursor:pointer;color:var(--ink);background:var(--yellow);box-shadow:0 6px 0 #d9ad3c}.btn:hover{transform:translateY(-2px)}.btn.secondary{background:#d9f0ff;box-shadow:0 6px 0 #a3cce5}.hidden{display:none!important}
+    .final{text-align:center;padding:28px 10px}.final .big8{font-size:110px;font-weight:900;color:var(--coral);line-height:.8}.stars{font-size:42px;letter-spacing:8px;color:#f4bc2e}.footer{text-align:center;color:#557184;font-size:13px;padding:18px}
+    @media(max-width:620px){.shell{padding:12px}.hero{min-height:390px;padding:25px}.hero:after{right:-7%;font-size:220px}.game{padding:18px}.answer{font-size:21px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">1-сынып · Математика</div>
+        <h1>Сегіз санының құпия асханасы</h1>
+        <p>Асханадағы достарға көмектесіп, 8 санының құпияларын бірге ашайық!</p>
+      </div>
+    </section>
+
+    <section class="game" aria-live="polite">
+      <div class="topbar"><div class="pill" id="step">1 / 5 тапсырма</div><div class="pill score">⭐ Ұпай: <span id="score">0</span></div></div>
+      <div class="progress"><span id="bar"></span></div>
+      <div id="playArea" class="question">
+        <div class="round" id="badge">8</div>
+        <h2 id="question">Дайынсың ба?</h2>
+        <p class="hint" id="hint">Дұрыс жауапты таңда.</p>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="controls"><button class="btn hidden" id="next">Келесі тапсырма →</button><button class="btn secondary" id="restart">Қайта бастау</button></div>
+      </div>
+      <div id="final" class="final hidden"><div class="big8">8</div><div class="stars">★★★</div><h2>Жарайсың, 8 санының шебері!</h2><p id="result"></p><button class="btn" id="again">Тағы ойнау</button></div>
+    </section>
+    <div class="footer">Жауабыңды ойлан, сана және түсіндір!</div>
+  </main>
+  <script>
+    const tasks = [
+      {q:'Асханада 8 алма бар. Дұрыс цифрды тап:',h:'Алмаларды сана.',a:['6','7','8','9'],c:2},
+      {q:'8 санының құрамын тап:',h:'Екі санды қосқанда 8 болуы керек.',a:['3 + 4','3 + 5','2 + 5','1 + 6'],c:1},
+      {q:'Тиісті таңбаны қой: 8  __  6',h:'Қай сан үлкен?',a:['<','>','=','+'],c:1},
+      {q:'Бос орынды толтыр: 7 + __ = 8',h:'7-ге қанша қоссақ, 8 болады?',a:['0','1','2','3'],c:1},
+      {q:'Дұрыс теңдікті тап:',h:'8 саны дұрыс шығатын мысалды таңда.',a:['8 − 2 = 5','4 + 4 = 8','6 + 1 = 8','3 + 3 = 8'],c:1}
+    ];
+    let index=0,score=0,locked=false;
+    const $=id=>document.getElementById(id);
+    function render(){
+      locked=false; const t=tasks[index]; $('step').textContent=`${index+1} / ${tasks.length} тапсырма`; $('score').textContent=score; $('bar').style.width=`${(index+1)/tasks.length*100}%`; $('question').textContent=t.q; $('hint').textContent=t.h; $('feedback').textContent=''; $('feedback').className='feedback'; $('next').classList.add('hidden'); $('badge').textContent=index===0?'8':index+1;
+      $('answers').innerHTML=t.a.map((x,i)=>`<button class="answer" data-i="${i}">${x}</button>`).join('');
+      document.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',()=>choose(Number(b.dataset.i),b)));
+    }
+    function choose(i,button){
+      if(locked)return; locked=true; const t=tasks[index]; document.querySelectorAll('.answer').forEach(b=>b.disabled=true);
+      if(i===t.c){score++;button.classList.add('correct');$('feedback').textContent='Дұрыс! Сен өте жақсы санадың! 🎉';$('feedback').classList.add('good')}
+      else{button.classList.add('wrong');document.querySelectorAll('.answer')[t.c].classList.add('correct');$('feedback').textContent='Қайта санауға болады. Дұрыс жауап жасыл түспен көрсетілді.';$('feedback').classList.add('bad')}
+      $('score').textContent=score;$('next').classList.remove('hidden');
+    }
+    function finish(){ $('playArea').classList.add('hidden');$('final').classList.remove('hidden');$('result').textContent=`Сен ${tasks.length} тапсырманың ${score}-іне дұрыс жауап бердің. Еңбегіңе рақмет!` }
+    $('next').addEventListener('click',()=>{if(index<tasks.length-1){index++;render()}else finish()});
+    function reset(){index=0;score=0;$('final').classList.add('hidden');$('playArea').classList.remove('hidden');render()}
+    $('restart').addEventListener('click',reset);$('again').addEventListener('click',reset);render();
+  </script>
+</body>
+</html>
